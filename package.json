@@ -10,12 +10,18 @@
     "type": "git",
     "url": "git+https://github.com/Ozafy/rail-commander-server.git"
   },
-  "keywords": [],
+  "keywords": [
+    "poweredup"
+  ],
   "author": "Laurens Panier",
   "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Ozafy/rail-commander-server/issues"
+  },
   "homepage": "https://github.com/Ozafy/rail-commander-server#readme",
   "dependencies": {
     "express": "^4.17.1",
+    "express-ws": "^4.0.0",
     "node-poweredup": "^6.2.0"
   }
 }

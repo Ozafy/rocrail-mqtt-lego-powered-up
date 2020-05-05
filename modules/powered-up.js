@@ -49,7 +49,7 @@ exports.getTrains = function () {
 }
 
 exports.brake = function (hubId, portName) {
-    console.log("Braking motor ("+hubId+":"+portName+")");
+    console.log("Braking motor (" + hubId + ":" + portName + ")");
     var hub = poweredUP.getHubByUUID(hubId);
     var motor = hub.getDeviceAtPort(portName);
     //write own brake code
@@ -57,21 +57,21 @@ exports.brake = function (hubId, portName) {
 }
 
 exports.stop = function (hubId, portName) {
-    console.log("Stopping motor ("+hubId+":"+portName+")");
+    console.log("Stopping motor (" + hubId + ":" + portName + ")");
     var hub = poweredUP.getHubByUUID(hubId);
     var motor = hub.getDeviceAtPort(portName);
     motor.stop();
 }
 
 exports.setPower = function (hubId, portName, power) {
-    console.log("Setting motor ("+hubId+":"+portName+") power to "+power);
+    console.log("Setting motor (" + hubId + ":" + portName + ") power to " + power);
     var hub = poweredUP.getHubByUUID(hubId);
     var motor = hub.getDeviceAtPort(portName);
     motor.setPower(power);
 }
 
 exports.rampPower = function (hubId, portName, fromPower, toPower, time) {
-    console.log("Ramping motor ("+hubId+":"+portName+") power from "+fromPower+" to "+toPower+" over "+time+"ms");
+    console.log("Ramping motor (" + hubId + ":" + portName + ") power from " + fromPower + " to " + toPower + " over " + time + "ms");
     var hub = poweredUP.getHubByUUID(hubId);
     var motor = hub.getDeviceAtPort(portName);
     //write own ramp code
