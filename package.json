@@ -15,6 +15,7 @@
   "license": "MIT",
   "homepage": "https://github.com/Ozafy/rail-commander-server#readme",
   "dependencies": {
+    "express": "^4.17.1",
     "node-poweredup": "^6.2.0"
   }
 }

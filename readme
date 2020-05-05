@@ -1,1 +1,17 @@
-Soon
+Basic webinterface for node-poweredup train functions.
+
+Set the webserver port in config.json
+
+Available functions:
+
+Get /hubs :
+List of train motors
+
+Post /hubs/:hubId/motor/:portName
+json body with the power setting, example:
+{
+    "power":50
+}
+
+Get /hubs/:hubId/motor/:portName/stop
+stop the specified motor
