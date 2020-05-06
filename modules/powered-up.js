@@ -4,19 +4,6 @@ const poweredUP = new PoweredUP.PoweredUP();
 const HubColors = [PoweredUP.Consts.Color.PURPLE, PoweredUP.Consts.Color.RED, PoweredUP.Consts.Color.GREEN, PoweredUP.Consts.Color.BLUE, PoweredUP.Consts.Color.YELLOW];
 var CurrentHubColor = 0;
 
-poweredUP.on("discover", async (hub) => {
-    console.log("Found hub " + hub.name);
-    await hub.connect();
-    hub.on("attach", (device) => {
-        if (device.type == PoweredUP.Consts.DeviceType.HUB_LED) {
-            device.setColor(HubColors[CurrentHubColor++]);
-            if (CurrentHubColor >= HubColors.length) {
-                CurrentHubColor = 0;
-            }
-        }
-    });
-});
-
 exports.disconnectHubs = function () {
     console.log("Disconnecting all hubs...");
     var hubs = poweredUP.getHubs();
@@ -28,6 +15,33 @@ exports.disconnectHubs = function () {
 exports.scan = function () {
     console.log("Scanning for powered up devices...");
     poweredUP.scan();
+}
+
+exports.enableDiscovery = function () {
+    poweredUP.on("discover", async (hub) => {
+        console.log("Found hub " + hub.name);
+        await hub.connect();
+        app = require("../index.js");
+        var mMessenger = app.get("mMessenger");
+        hub.on("attach", (device) => {
+            if (device.type == PoweredUP.Consts.DeviceType.HUB_LED) {
+                device.setColor(HubColors[CurrentHubColor++]);
+                if (CurrentHubColor >= HubColors.length) {
+                    CurrentHubColor = 0;
+                }
+            }
+            if (device.type == PoweredUP.Consts.DeviceType.TRAIN_MOTOR) {
+                mMessenger.broadCastMessage(mMessenger.listTrainHubs());
+            }
+        });
+        hub.on("detach", (port) => {
+            mMessenger.broadCastMessage(mMessenger.listTrainHubs());
+
+        });
+        hub.on("disconnect", () => {
+            mMessenger.broadCastMessage(mMessenger.listTrainHubs());
+        })
+    });
 }
 
 exports.stopscan = function () {
@@ -46,7 +60,7 @@ exports.getTrainHubs = function () {
         hubWrapper.motors = [];
         var devices = hub.getDevicesByType(PoweredUP.Consts.DeviceType.TRAIN_MOTOR);
         for (var deviceId in devices) {
-            hubWrapper.motors.push({portName:devices[deviceId].portName});
+            hubWrapper.motors.push({ portName: devices[deviceId].portName });
         }
         trainHubs.push(hubWrapper);
     }

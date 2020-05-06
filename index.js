@@ -1,18 +1,23 @@
 var config = require('./config.json');
-
+var mMessenger = require('./modules/messenger');
 var mPoweredUp = require('./modules/powered-up');
-mPoweredUp.scan();
 
-var mMessageParser = require('./modules/message-parser');
+
 
 var express = require("express");
 var app = express();
-var expressWs = require('express-ws')(app);
-
+var mExpressWs = require('express-ws')(app);
 
 app.set('mPoweredUp', mPoweredUp);
+app.set('mMessenger', mMessenger);
+app.set('mExpressWs', mExpressWs);
 
-app.ws('/', mMessageParser.message);
+app.ws('/', mMessenger.message);
+
+mExpressWs.getWss().on('connection', mMessenger.connection);
+
+mPoweredUp.scan();
+mPoweredUp.enableDiscovery();
 
 app.listen(config.server.port, () => {
     console.log("Server running on port " + config.server.port);
@@ -22,13 +27,14 @@ app.use(function (req, res) {
     res.status(404).send({ url: req.originalUrl + ' not found' })
 });
 
+module.exports = app;
 
 function exitHandler(options, exitCode) {
-    mPoweredUp.disconnectHubs();
     mPoweredUp.stopscan();
-    /*if (options.cleanup) console.log('clean');
+    mPoweredUp.disconnectHubs();
+    if (options.cleanup) console.log('clean');
     if (exitCode || exitCode === 0) console.log(exitCode);
-    if (options.exit) process.exit();*/
+    if (options.exit) process.exit();
 }
 
 //do something when app is closing
