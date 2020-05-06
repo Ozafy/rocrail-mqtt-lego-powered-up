@@ -35,24 +35,29 @@ exports.stopscan = function () {
     poweredUP.stop();
 }
 
-exports.getTrains = function () {
-    var trains = [];
+exports.getTrainHubs = function () {
+    var trainHubs = [];
     var hubs = poweredUP.getHubs();
     for (var hubId in hubs) {
         var hub = hubs[hubId];
+        var hubWrapper = {};
+        hubWrapper.hubId = hub.uuid;
+        hubWrapper.batteryLevel = hub.batteryLevel;
+        hubWrapper.motors = [];
         var devices = hub.getDevicesByType(PoweredUP.Consts.DeviceType.TRAIN_MOTOR);
         for (var deviceId in devices) {
-            trains.push(devices[deviceId]);
+            hubWrapper.motors.push({portName:devices[deviceId].portName});
         }
+        trainHubs.push(hubWrapper);
     }
-    return trains;
+    return trainHubs;
 }
 
 exports.brake = function (hubId, portName) {
     console.log("Braking motor (" + hubId + ":" + portName + ")");
     var hub = poweredUP.getHubByUUID(hubId);
     var motor = hub.getDeviceAtPort(portName);
-    //write own brake code
+    //write own brake code 
     motor.brake();
 }
 
@@ -74,6 +79,6 @@ exports.rampPower = function (hubId, portName, fromPower, toPower, time) {
     console.log("Ramping motor (" + hubId + ":" + portName + ") power from " + fromPower + " to " + toPower + " over " + time + "ms");
     var hub = poweredUP.getHubByUUID(hubId);
     var motor = hub.getDeviceAtPort(portName);
-    //write own ramp code
+    //fix ramping for non 0 starts?
     motor.rampPower(fromPower, toPower, time);
 }

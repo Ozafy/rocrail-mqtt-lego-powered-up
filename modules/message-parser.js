@@ -7,8 +7,8 @@ exports.message = function (ws, req) {
                 case "PING":
                     ws.send("PONG");
                     break;
-                case "TRAINS":
-                    ws.send(listTrains(mPoweredUp));
+                case "TRAINHUBS":
+                    ws.send(listTrainHubs(mPoweredUp));
                     break;
                 case "TRAIN":
                     messageParts.shift();
@@ -35,17 +35,13 @@ function parseTrainCommand(mPoweredUp, messageParts) {
     }
 }
 
-function listTrains(mPoweredUp) {
-    var devices = mPoweredUp.getTrains();
-    var trains = [];
-    for (var deviceId in devices) {
-        trains.push([devices[deviceId].hub.uuid, devices[deviceId].portName]);
-    }
-    if (trains.length > 0) {
-        return "TRAINS "+ JSON.stringify(trains);
+function listTrainHubs(mPoweredUp) {
+    var hubs = mPoweredUp.getTrainHubs();
+    if (hubs.length > 0) {
+        return "TRAINHUBS :"+ JSON.stringify(hubs);
     }
     else {
-        return "TRAINS 0";
+        return "TRAINHUBS :[]";
     }
 }
 
