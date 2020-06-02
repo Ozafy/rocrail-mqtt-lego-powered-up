@@ -1,4 +1,4 @@
-# rail-commander-server
+# rocrail-mqtt-lego-powered-up
 
 An MQTT client for lego poweredup trains. Uses [node-poweredup](https://nathankellenicki.github.io/node-poweredup) train functions. To be used with [rocrail](https://wiki.rocrail.net). Tested with MQTT broker [mosquitto](https://mosquitto.org).
 
