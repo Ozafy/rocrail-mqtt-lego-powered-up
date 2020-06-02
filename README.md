@@ -1,4 +1,4 @@
-# rocrail-mqtt-lego-powered-up
+# Rocrail MQTT Client for Lego Powered-up trains
 
 An MQTT client for lego poweredup trains. Uses [node-poweredup](https://nathankellenicki.github.io/node-poweredup) train functions. To be used with [rocrail](https://wiki.rocrail.net). Tested with MQTT broker [mosquitto](https://mosquitto.org).
 
