@@ -2,32 +2,18 @@ var config = require('./config.json');
 var mMessenger = require('./modules/messenger');
 var mPoweredUp = require('./modules/powered-up');
 
+var mqtt = require('mqtt');
+var client  = mqtt.connect('mqtt://'+config.server.host+':'+config.server.port);
 
-
-var express = require("express");
-var app = express();
-var mExpressWs = require('express-ws')(app);
-
-app.set('mPoweredUp', mPoweredUp);
-app.set('mMessenger', mMessenger);
-app.set('mExpressWs', mExpressWs);
-
-app.ws('/', mMessenger.message);
-
-mExpressWs.getWss().on('connection', mMessenger.connection);
+client.on('connect', function () {
+    client.subscribe('rocrail/service/command')
+    console.log('client subscribed to rocrail commands')
+})
 
 mPoweredUp.scan();
 mPoweredUp.enableDiscovery();
 
-app.listen(config.server.port, () => {
-    console.log("Server running on port " + config.server.port);
-});
-
-app.use(function (req, res) {
-    res.status(404).send({ url: req.originalUrl + ' not found' })
-});
-
-module.exports = app;
+client.on('message', mMessenger.message)
 
 function exitHandler(options, exitCode) {
     mPoweredUp.stopscan();

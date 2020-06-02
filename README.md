@@ -1,15 +1,29 @@
 # rail-commander-server
 
-A Websocket server for [node-poweredup](https://nathankellenicki.github.io/node-poweredup) train functions. To be used with [rail-commander-gui](https://github.com/Ozafy/rail-commander-gui).
+An MQTT client for lego poweredup trains. Uses [node-poweredup](https://nathankellenicki.github.io/node-poweredup) train functions. To be used with [rocrail](https://wiki.rocrail.net). Tested with MQTT broker [mosquitto](https://mosquitto.org).
 
-## Configuration
+## Rocrail Configuration
 
-Set the server port in __config.json__
+Set the locomotive ID to the powered up hub id and port
+
+You can find these by looking at the console output when connecting the hub:
+
+```
+Found hub Hubname (id: 90842b0ed660)
+Hubname(id: 90842b0ed660) has a trainmotor on port: A
+```
+
+Now set your locomotive id to: 90842b0ed660:A
+
+## MQTT Configuration
+
+Set the server host and port in __config.json__
 
 ```javascript
 {
     "server": {
-        "port": 3000
+        "host":"localhost",
+        "port": 1883
     }
 }
 ```

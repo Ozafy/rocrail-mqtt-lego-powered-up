@@ -19,10 +19,8 @@ exports.scan = function () {
 
 exports.enableDiscovery = function () {
     poweredUP.on("discover", async (hub) => {
-        console.log("Found hub " + hub.name);
+        console.log("Found hub " + hub.name + ' (id: ' + hub.uuid + ')');
         await hub.connect();
-        app = require("../index.js");
-        var mMessenger = app.get("mMessenger");
         hub.on("attach", (device) => {
             if (device.type == PoweredUP.Consts.DeviceType.HUB_LED) {
                 device.setColor(HubColors[CurrentHubColor++]);
@@ -31,40 +29,15 @@ exports.enableDiscovery = function () {
                 }
             }
             if (device.type == PoweredUP.Consts.DeviceType.TRAIN_MOTOR) {
-                mMessenger.broadCastMessage(mMessenger.listTrainHubs());
+                console.log(hub.name + '(id: ' + hub.uuid + ') has a trainmotor on port: ' + device.portName);
             }
         });
-        hub.on("detach", (port) => {
-            mMessenger.broadCastMessage(mMessenger.listTrainHubs());
-
-        });
-        hub.on("disconnect", () => {
-            mMessenger.broadCastMessage(mMessenger.listTrainHubs());
-        })
     });
 }
 
 exports.stopscan = function () {
     console.log("Stopped scanning for powered up devices...");
     poweredUP.stop();
-}
-
-exports.getTrainHubs = function () {
-    var trainHubs = [];
-    var hubs = poweredUP.getHubs();
-    for (var hubId in hubs) {
-        var hub = hubs[hubId];
-        var hubWrapper = {};
-        hubWrapper.hubId = hub.uuid;
-        hubWrapper.batteryLevel = hub.batteryLevel;
-        hubWrapper.motors = [];
-        var devices = hub.getDevicesByType(PoweredUP.Consts.DeviceType.TRAIN_MOTOR);
-        for (var deviceId in devices) {
-            hubWrapper.motors.push({ portName: devices[deviceId].portName });
-        }
-        trainHubs.push(hubWrapper);
-    }
-    return trainHubs;
 }
 
 exports.brake = function (hubId, portName) {

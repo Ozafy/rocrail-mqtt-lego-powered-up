@@ -20,8 +20,8 @@
   },
   "homepage": "https://github.com/Ozafy/rail-commander-server#readme",
   "dependencies": {
-    "express": "^4.17.1",
-    "express-ws": "^4.0.0",
-    "node-poweredup": "^6.2.0"
+    "mqtt": "^4.1.0",
+    "node-poweredup": "^6.2.0",
+    "xml2js": "^0.4.23"
   }
 }
