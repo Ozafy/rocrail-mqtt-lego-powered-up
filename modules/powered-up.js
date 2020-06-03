@@ -41,31 +41,47 @@ exports.stopscan = function () {
 }
 
 exports.brake = function (hubId, portName) {
-    console.log("Braking motor (" + hubId + ":" + portName + ")");
-    var hub = poweredUP.getHubByUUID(hubId);
-    var motor = hub.getDeviceAtPort(portName);
-    //write own brake code 
-    motor.brake();
+    try {
+        console.log("Braking motor (" + hubId + ":" + portName + ")");
+        var hub = poweredUP.getHubByUUID(hubId);
+        var motor = hub.getDeviceAtPort(portName);
+        //write own brake code 
+        motor.brake();
+    } catch (err) {
+
+    }
 }
 
 exports.stop = function (hubId, portName) {
-    console.log("Stopping motor (" + hubId + ":" + portName + ")");
-    var hub = poweredUP.getHubByUUID(hubId);
-    var motor = hub.getDeviceAtPort(portName);
-    motor.stop();
+    try {
+        console.log("Stopping motor (" + hubId + ":" + portName + ")");
+        var hub = poweredUP.getHubByUUID(hubId);
+        var motor = hub.getDeviceAtPort(portName);
+        motor.stop();
+    } catch (err) {
+
+    }
 }
 
 exports.setPower = function (hubId, portName, power) {
-    console.log("Setting motor (" + hubId + ":" + portName + ") power to " + power);
-    var hub = poweredUP.getHubByUUID(hubId);
-    var motor = hub.getDeviceAtPort(portName);
-    motor.setPower(power);
+    try {
+        console.log("Setting motor (" + hubId + ":" + portName + ") power to " + power);
+        var hub = poweredUP.getHubByUUID(hubId);
+        var motor = hub.getDeviceAtPort(portName);
+        motor.setPower(power);
+    } catch (err) {
+
+    }
 }
 
 exports.rampPower = function (hubId, portName, fromPower, toPower, time) {
-    console.log("Ramping motor (" + hubId + ":" + portName + ") power from " + fromPower + " to " + toPower + " over " + time + "ms");
-    var hub = poweredUP.getHubByUUID(hubId);
-    var motor = hub.getDeviceAtPort(portName);
-    //fix ramping for non 0 starts?
-    motor.rampPower(fromPower, toPower, time);
+    try {
+        console.log("Ramping motor (" + hubId + ":" + portName + ") power from " + fromPower + " to " + toPower + " over " + time + "ms");
+        var hub = poweredUP.getHubByUUID(hubId);
+        var motor = hub.getDeviceAtPort(portName);
+        //fix ramping for non 0 starts?
+        motor.rampPower(fromPower, toPower, time);
+    } catch (err) {
+
+    }
 }
