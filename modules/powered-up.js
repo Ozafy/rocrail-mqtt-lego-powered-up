@@ -85,3 +85,37 @@ exports.rampPower = function (hubId, portName, fromPower, toPower, time) {
 
     }
 }
+
+exports.stopAll = function () {
+    try {
+        console.log("Stopping all trains");
+        var hubs = module.exports.getTrainHubs();
+        for (var hubIndex in hubs) {
+            for (var motorIndex in hubs[hubIndex].motors) {
+                module.exports.stop(hubs[hubIndex].hubId, hubs[hubIndex].motors[motorIndex].portName);
+            }
+        }
+    } catch (err) {
+        console.log("Error while stopping all trains, assuming the worst and shutting down");
+        console.dir(err);
+        process.exit(1);
+    }
+}
+
+exports.getTrainHubs = function () {
+    var trainHubs = [];
+    var hubs = poweredUP.getHubs();
+    for (var hubId in hubs) {
+        var hub = hubs[hubId];
+        var hubWrapper = {};
+        hubWrapper.hubId = hub.uuid;
+        hubWrapper.batteryLevel = hub.batteryLevel;
+        hubWrapper.motors = [];
+        var devices = hub.getDevicesByType(PoweredUP.Consts.DeviceType.TRAIN_MOTOR);
+        for (var deviceId in devices) {
+            hubWrapper.motors.push({ portName: devices[deviceId].portName });
+        }
+        trainHubs.push(hubWrapper);
+    }
+    return trainHubs;
+}
